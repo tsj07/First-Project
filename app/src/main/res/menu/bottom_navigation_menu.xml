@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/contacts"
+    android:enabled="true"
+    android:icon="@drawable/ic_favorite"
+    android:title="Contacts"/>
+<item
+    android:id="@+id/music"
+    android:enabled="true"
+    android:icon="@drawable/ic_favorite"
+    android:title="Music"/>
+<item
+    android:id="@+id/places"
+    android:enabled="true"
+    android:icon="@drawable/ic_favorite"
+    android:title="Places"/>
+</menu>
