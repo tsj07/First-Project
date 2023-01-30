@@ -8,14 +8,14 @@
 
     <ImageView
         android:id="@+id/ivContacts"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
         android:layout_marginEnd="10dp"
         android:contentDescription="TODO"
         android:cropToPadding="true"
         android:padding="5dp"
-        android:src="@drawable/ic_contacts" />
+        android:src="@drawable/ic_person" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -45,13 +45,15 @@
 
     </LinearLayout>
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/btnCall"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
-        android:contentDescription="TODO"
+        android:layout_marginEnd="5dp"
         android:padding="4dp"
-        android:src="@drawable/ic_phone" />
+        android:background="@drawable/ic_phone"
+        android:contentDescription="TODO" />
 
 </LinearLayout>

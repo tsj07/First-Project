@@ -1,41 +1,50 @@
 package com.example.activitysample;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.activitysample.Fragments.FirstFragment;
+import com.example.activitysample.Fragments.SecondFragment;
+import com.example.activitysample.Fragments.ThirdFragment;
 import com.example.activitysample.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new FirstFragment());
 
-        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+        replaceFragment(new ThirdFragment());
 
-            switch (item.getItemId()) {
+        binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                case (R.id.contacts):
-                    replaceFragment(new FirstFragment());
-                    break;
-                case (R.id.music):
-                    replaceFragment(new SecondFragment());
-                    break;
-                case (R.id.places):
-                    replaceFragment(new ThirdFragment());
-                    break;
+                switch (item.getItemId()) {
+
+                    case (R.id.places):
+                        MainActivity.this.replaceFragment(new ThirdFragment());
+                        break;
+                    case (R.id.music):
+                        MainActivity.this.replaceFragment(new SecondFragment());
+                        break;
+                    case (R.id.contacts):
+                        MainActivity.this.replaceFragment(new FirstFragment());
+                        break;
+                }
+                return true;
             }
-            return true;
         });
     }
 

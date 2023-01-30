@@ -1,4 +1,4 @@
-package com.example.activitysample;
+package com.example.activitysample.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,16 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class SecondFragment extends Fragment {
+import com.example.activitysample.R;
 
-    public SecondFragment() {
+public class ThirdFragment extends Fragment {
+
+    public ThirdFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.second_fragment, container, false);
+        return inflater.inflate(R.layout.third_fragment, container, false);
 
     }
 }
