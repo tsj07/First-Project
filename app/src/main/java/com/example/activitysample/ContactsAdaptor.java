@@ -9,20 +9,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.activitysample.RoomDatabase.ContactsData;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.ContactsHolder> {
 
     Activity activity;
     ArrayList<ContactsModel> arrayList;
     RvInterface rvInterface;
+    List<ContactsData> contactsDataList;
 
     public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList, RvInterface rvInterface) {
         this.activity = activity;
         this.arrayList = arrayList;
         this.rvInterface = rvInterface;
+    }
+
+    public ContactsAdaptor(FragmentActivity activity, List<ContactsData> contactsDataList) {
+        this.activity = activity;
+        this.contactsDataList = contactsDataList;
+    }
+
+    public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList) {
+        this.activity = activity;
+        this.arrayList = arrayList;
     }
 
     @NonNull

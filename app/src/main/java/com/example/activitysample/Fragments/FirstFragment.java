@@ -25,14 +25,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.example.activitysample.ContactsAdaptor;
 import com.example.activitysample.ContactsModel;
 import com.example.activitysample.R;
+import com.example.activitysample.RoomDatabase.ContactsDAO;
+import com.example.activitysample.RoomDatabase.ContactsData;
+import com.example.activitysample.RoomDatabase.ContactsDatabase;
 import com.example.activitysample.RvInterface;
 import com.example.activitysample.databinding.FirstFragmentBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -41,6 +47,8 @@ public class FirstFragment extends Fragment implements RvInterface {
     Context context;
     ArrayList<ContactsModel> arrayList = new ArrayList<>();
     FirstFragmentBinding firstFragmentBinding;
+    ContactsDAO contactsDAO;
+    ContactsAdaptor adapter;
 
     public FirstFragment() {
     }
@@ -56,15 +64,42 @@ public class FirstFragment extends Fragment implements RvInterface {
         checkPermission();
         callPermission();
 
-        ContactsAdaptor adapter = new ContactsAdaptor(getActivity(), arrayList, this);
+        final String DB_NAME = "contacts_db";
+        ContactsDatabase db =
+                Room.databaseBuilder(context, ContactsDatabase.class, DB_NAME)
+                        .allowMainThreadQueries()
+                        .build();
+        contactsDAO = db.contactsDAO(context);
+
+        ArrayList<ContactsModel> models = new ArrayList<>();
+        String sName = models.toString()
+
+        contactsDAO.addContacts(new ContactsData("Tushar", "12345"));
+
+//        contactsDAO.addContacts(new ContactsData("Tushar", "1234567"));
+
+        adapter = new ContactsAdaptor(getActivity(), arrayList, this);
         firstFragmentBinding.recyclerView.setAdapter(adapter);
         firstFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(firstFragmentBinding.recyclerView);
 
+//        new dbThread().start();
+
         return view;
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // retrieve all data that was written into the database
+        List<ContactsData> contactsList = contactsDAO.getAllContacts();
+        Collections.reverse(contactsList);
+        // set the data into the recycler View
+        adapter = new ContactsAdaptor(getActivity(), contactsList);
+        firstFragmentBinding.recyclerView.setAdapter(adapter);
     }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
