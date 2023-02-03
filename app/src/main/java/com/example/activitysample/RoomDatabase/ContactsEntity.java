@@ -6,7 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "My_contacts")
-public class ContactsData {
+public class ContactsEntity {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo (name = "id")
@@ -18,14 +18,14 @@ public class ContactsData {
     @ColumnInfo (name = "PhoneNo")
      private String contactsPhone;
 
-    public ContactsData(int id, String contactsName, String contactsPhone) {
+    public ContactsEntity(int id, String contactsName, String contactsPhone) {
         this.id = id;
         this.contactsName = contactsName;
         this.contactsPhone = contactsPhone;
     }
 
     @Ignore
-    public ContactsData(String contactsName, String contactsPhone) {
+    public ContactsEntity(String contactsName, String contactsPhone) {
         this.contactsName = contactsName;
         this.contactsPhone = contactsPhone;
     }

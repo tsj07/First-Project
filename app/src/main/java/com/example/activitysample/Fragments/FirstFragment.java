@@ -31,14 +31,12 @@ import com.example.activitysample.ContactsAdaptor;
 import com.example.activitysample.ContactsModel;
 import com.example.activitysample.R;
 import com.example.activitysample.RoomDatabase.ContactsDAO;
-import com.example.activitysample.RoomDatabase.ContactsData;
+import com.example.activitysample.RoomDatabase.ContactsEntity;
 import com.example.activitysample.RoomDatabase.ContactsDatabase;
 import com.example.activitysample.RvInterface;
 import com.example.activitysample.databinding.FirstFragmentBinding;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -72,11 +70,9 @@ public class FirstFragment extends Fragment implements RvInterface {
         contactsDAO = db.contactsDAO(context);
 
         ArrayList<ContactsModel> models = new ArrayList<>();
-        String sName = models.toString()
+        String sName = models.toString();
 
-        contactsDAO.addContacts(new ContactsData("Tushar", "12345"));
-
-//        contactsDAO.addContacts(new ContactsData("Tushar", "1234567"));
+        contactsDAO.addContacts(new ContactsEntity("Tushar", "12345"));
 
         adapter = new ContactsAdaptor(getActivity(), arrayList, this);
         firstFragmentBinding.recyclerView.setAdapter(adapter);
@@ -91,16 +87,16 @@ public class FirstFragment extends Fragment implements RvInterface {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // retrieve all data that was written into the database
-        List<ContactsData> contactsList = contactsDAO.getAllContacts();
-        Collections.reverse(contactsList);
-        // set the data into the recycler View
-        adapter = new ContactsAdaptor(getActivity(), contactsList);
-        firstFragmentBinding.recyclerView.setAdapter(adapter);
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        // retrieve all data that was written into the database
+//        List<ContactsData> contactsList = contactsDAO.getAllContacts();
+//        Collections.reverse(contactsList);
+//        // set the data into the recycler View
+//        adapter = new ContactsAdaptor(getActivity(), contactsList);
+//        firstFragmentBinding.recyclerView.setAdapter(adapter);
+//    }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
             ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {

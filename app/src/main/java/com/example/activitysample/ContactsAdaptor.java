@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.activitysample.RoomDatabase.ContactsData;
+import com.example.activitysample.RoomDatabase.ContactsEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
     Activity activity;
     ArrayList<ContactsModel> arrayList;
     RvInterface rvInterface;
-    List<ContactsData> contactsDataList;
+    List<ContactsEntity> contactsEntityList;
 
     public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList, RvInterface rvInterface) {
         this.activity = activity;
@@ -30,9 +30,9 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
         this.rvInterface = rvInterface;
     }
 
-    public ContactsAdaptor(FragmentActivity activity, List<ContactsData> contactsDataList) {
+    public ContactsAdaptor(FragmentActivity activity, List<ContactsEntity> contactsEntityList) {
         this.activity = activity;
-        this.contactsDataList = contactsDataList;
+        this.contactsEntityList = contactsEntityList;
     }
 
     public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList) {

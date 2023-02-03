@@ -10,12 +10,12 @@ import java.util.List;
 public interface ContactsDAO {
 
     @Query("SELECT * FROM My_contacts")
-    List<ContactsData> getAllContacts();
+    List<ContactsEntity> getAllContacts();
 
     @Query("SELECT * FROM My_contacts where id = id")
-    ContactsData getItemByID(int id);
+    ContactsEntity getItemByID(int id);
 
     @Insert
-    void addContacts(ContactsData contactsData);
+    void addContacts(ContactsEntity contactsEntity);
 
 }
