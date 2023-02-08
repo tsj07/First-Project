@@ -58,20 +58,12 @@ public class FirstFragment extends Fragment implements RvInterface {
         assert container != null;
         context = container.getContext();
 
-        contactsViewModel= new ViewModelProvider(this).get(ContactsViewModel.class);
-
         checkPermission();
         callPermission();
 
         adapter = new ContactsAdaptor(getActivity(), arrayList, this);
         firstFragmentBinding.recyclerView.setAdapter(adapter);
         firstFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-//        contactsViewModel.getListLiveData().observe(getActivity(), contactsEntities -> {
-//            if (contactsEntities.size() > 0){
-//                contactsViewModel.insert(new ContactsEntity(name, number));
-//            }
-//        });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(firstFragmentBinding.recyclerView);
@@ -185,11 +177,12 @@ public class FirstFragment extends Fragment implements RvInterface {
                     model.setContactName(name);
                     model.setPhone(number);
 
-                    contactsViewModel.getListLiveData().observe(getActivity(), contactsData -> {
-                        if (contactsData.size() > 0){
-                            contactsViewModel.insert(new ContactsData(name, number));
-                        }
+                    contactsViewModel = new ViewModelProvider(FirstFragment.this).get(ContactsViewModel.class);
+                    contactsViewModel.getListLiveData().observe(getViewLifecycleOwner(), contactsData -> {
+
                     });
+
+                    contactsViewModel.insert(new ContactsData(name , number));
 
                     phoneCursor.close();
                 }
