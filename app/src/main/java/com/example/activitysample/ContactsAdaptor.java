@@ -11,8 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Ignore;
 
-import com.example.activitysample.RoomDatabase.ContactsEntity;
+import com.example.activitysample.RoomDatabase.ContactsData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
     Activity activity;
     ArrayList<ContactsModel> arrayList;
     RvInterface rvInterface;
-    List<ContactsEntity> contactsEntityList;
+    List<ContactsData> contactsEntityList;
 
     public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList, RvInterface rvInterface) {
         this.activity = activity;
@@ -30,7 +31,8 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
         this.rvInterface = rvInterface;
     }
 
-    public ContactsAdaptor(FragmentActivity activity, List<ContactsEntity> contactsEntityList) {
+    @Ignore
+    public ContactsAdaptor(FragmentActivity activity, List<ContactsData> contactsEntityList) {
         this.activity = activity;
         this.contactsEntityList = contactsEntityList;
     }
@@ -50,9 +52,9 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
 
     @Override
     public void onBindViewHolder(@NonNull ContactsHolder holder, int position) {
-         ContactsModel contactsModel = arrayList.get(position);
-         holder.tvName.setText(contactsModel.getContactName());
-         holder.tvPhone.setText(contactsModel.getPhone());
+        ContactsModel contactsModel = arrayList.get(position);
+        holder.tvName.setText(contactsModel.getContactName());
+        holder.tvPhone.setText(contactsModel.getPhone());
     }
 
     @Override
@@ -67,27 +69,27 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
 
         public ContactsHolder(@NonNull View itemView, RvInterface rvInterface) {
             super(itemView);
-             tvName = itemView.findViewById(R.id.tvContactName);
-             tvPhone = itemView.findViewById(R.id.tvContactPhone);
-             btnCall = itemView.findViewById(R.id.btnCall);
+            tvName = itemView.findViewById(R.id.tvContactName);
+            tvPhone = itemView.findViewById(R.id.tvContactPhone);
+            btnCall = itemView.findViewById(R.id.btnCall);
 
-             btnCall.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     Toast.makeText(v.getContext(), "Clicked", Toast.LENGTH_SHORT).show();
-                 }
-             });
+            btnCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-             itemView.setOnClickListener(v -> {
-                 if (rvInterface != null){
-                     int pos = getAdapterPosition();
-                     String number = tvPhone.getText().toString();
+            itemView.setOnClickListener(v -> {
+                if (rvInterface != null) {
+                    int pos = getAdapterPosition();
+                    String number = tvPhone.getText().toString();
 
-                     if (pos != RecyclerView.NO_POSITION){
-                         rvInterface.itemOnClick(pos, number);
-                     }
-                 }
-             });
+                    if (pos != RecyclerView.NO_POSITION) {
+                        rvInterface.itemOnClick(pos, number);
+                    }
+                }
+            });
         }
     }
 

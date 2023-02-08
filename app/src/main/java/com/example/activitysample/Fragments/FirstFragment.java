@@ -22,17 +22,16 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.example.activitysample.ContactsAdaptor;
 import com.example.activitysample.ContactsModel;
 import com.example.activitysample.R;
-import com.example.activitysample.RoomDatabase.ContactsDAO;
-import com.example.activitysample.RoomDatabase.ContactsEntity;
-import com.example.activitysample.RoomDatabase.ContactsDatabase;
+import com.example.activitysample.RoomDatabase.ContactsData;
+import com.example.activitysample.RoomDatabase.ContactsViewModel;
 import com.example.activitysample.RvInterface;
 import com.example.activitysample.databinding.FirstFragmentBinding;
 
@@ -45,8 +44,8 @@ public class FirstFragment extends Fragment implements RvInterface {
     Context context;
     ArrayList<ContactsModel> arrayList = new ArrayList<>();
     FirstFragmentBinding firstFragmentBinding;
-    ContactsDAO contactsDAO;
     ContactsAdaptor adapter;
+    ContactsViewModel contactsViewModel;
 
     public FirstFragment() {
     }
@@ -59,29 +58,23 @@ public class FirstFragment extends Fragment implements RvInterface {
         assert container != null;
         context = container.getContext();
 
+        contactsViewModel= new ViewModelProvider(this).get(ContactsViewModel.class);
+
         checkPermission();
         callPermission();
-
-        final String DB_NAME = "contacts_db";
-        ContactsDatabase db =
-                Room.databaseBuilder(context, ContactsDatabase.class, DB_NAME)
-                        .allowMainThreadQueries()
-                        .build();
-        contactsDAO = db.contactsDAO(context);
-
-        ArrayList<ContactsModel> models = new ArrayList<>();
-        String sName = models.toString();
-
-        contactsDAO.addContacts(new ContactsEntity("Tushar", "12345"));
 
         adapter = new ContactsAdaptor(getActivity(), arrayList, this);
         firstFragmentBinding.recyclerView.setAdapter(adapter);
         firstFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+//        contactsViewModel.getListLiveData().observe(getActivity(), contactsEntities -> {
+//            if (contactsEntities.size() > 0){
+//                contactsViewModel.insert(new ContactsEntity(name, number));
+//            }
+//        });
+
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(firstFragmentBinding.recyclerView);
-
-//        new dbThread().start();
 
         return view;
 
@@ -191,6 +184,13 @@ public class FirstFragment extends Fragment implements RvInterface {
                     arrayList.add(model);
                     model.setContactName(name);
                     model.setPhone(number);
+
+                    contactsViewModel.getListLiveData().observe(getActivity(), contactsData -> {
+                        if (contactsData.size() > 0){
+                            contactsViewModel.insert(new ContactsData(name, number));
+                        }
+                    });
+
                     phoneCursor.close();
                 }
             }
