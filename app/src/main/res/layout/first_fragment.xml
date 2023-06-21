@@ -36,7 +36,7 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -47,16 +47,16 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/search_bg">
 
-    </SearchView>
+    </androidx.appcompat.widget.SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/search"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp" />
 
 </RelativeLayout>

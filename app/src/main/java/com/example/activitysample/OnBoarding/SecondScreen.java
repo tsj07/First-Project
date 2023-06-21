@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -34,7 +33,7 @@ public class SecondScreen extends Fragment {
         drawable.setExitFadeDuration(2000);
         drawable.start();
 
-        tvNext = view.findViewById(R.id.tvNext);
+//        tvNext = view.findViewById(R.id.tvNext);
         tvSkip = view.findViewById(R.id.tvSkip);
 
         tvSkip.setOnClickListener(new View.OnClickListener() {
@@ -46,12 +45,12 @@ public class SecondScreen extends Fragment {
             }
         });
 
-        tvNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Not Working", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        tvNext.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(), "Not Working", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         return view;
 

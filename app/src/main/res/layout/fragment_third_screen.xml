@@ -10,11 +10,11 @@
 
     <ImageView
         android:id="@+id/ivPhoto"
-        android:layout_width="260dp"
-        android:layout_height="300sp"
+        android:layout_width="333dp"
+        android:layout_height="333dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:src="@drawable/ic_contacts" />
+        android:src="@drawable/ic_places"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvHeading"
@@ -23,7 +23,7 @@
         android:layout_below="@+id/ivPhoto"
         android:layout_centerInParent="true"
         android:layout_marginTop="50dp"
-        android:text="Contacts"
+        android:text="Places"
         android:textColor="@color/white"
         android:textSize="50sp"
         android:textStyle="bold" />

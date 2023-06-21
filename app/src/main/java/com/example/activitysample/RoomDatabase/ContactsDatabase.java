@@ -12,9 +12,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {ContactsData.class}, exportSchema = false, version = 1)
-public abstract class ContactsDatabase extends RoomDatabase{
+public abstract class ContactsDatabase extends RoomDatabase {
 
     public abstract ContactsDAO contactsDAO(Context context);
+
     private static volatile ContactsDatabase INSTANCE;
     private static final int noOfThreads = 1;
     public static final ExecutorService databaseExecutor = Executors.newFixedThreadPool(noOfThreads);
@@ -29,7 +30,7 @@ public abstract class ContactsDatabase extends RoomDatabase{
                             .addCallback(roomDatabaseCallback)
                             .allowMainThreadQueries()
                             .build();
-                  }
+                }
             }
         }
         return INSTANCE;

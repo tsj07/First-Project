@@ -1,5 +1,7 @@
 package com.example.activitysample.Fragments;
 
+import static android.Manifest.permission.READ_CONTACTS;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,20 +17,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.activitysample.ContactsAdaptor;
-import com.example.activitysample.ContactsModel;
 import com.example.activitysample.R;
 import com.example.activitysample.RoomDatabase.ContactsData;
 import com.example.activitysample.RoomDatabase.ContactsViewModel;
@@ -36,13 +39,14 @@ import com.example.activitysample.RvInterface;
 import com.example.activitysample.databinding.FirstFragmentBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class FirstFragment extends Fragment implements RvInterface {
 
     Context context;
-    ArrayList<ContactsModel> arrayList = new ArrayList<>();
+    ArrayList<ContactsData> listContactsData = new ArrayList<>();
     FirstFragmentBinding firstFragmentBinding;
     ContactsAdaptor adapter;
     ContactsViewModel contactsViewModel;
@@ -52,36 +56,42 @@ public class FirstFragment extends Fragment implements RvInterface {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         firstFragmentBinding = FirstFragmentBinding.inflate(inflater, container, false);
         View view = firstFragmentBinding.getRoot();
         assert container != null;
         context = container.getContext();
 
-        checkPermission();
-        callPermission();
+        contactsViewModel = new ViewModelProvider((ViewModelStoreOwner) FirstFragment.this).get(ContactsViewModel.class);
 
-        adapter = new ContactsAdaptor(getActivity(), arrayList, this);
-        firstFragmentBinding.recyclerView.setAdapter(adapter);
-        firstFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        adapter = new ContactsAdaptor(getActivity(), listContactsData, this);
+        firstFragmentBinding.recyclerView.setLayoutManager(new LinearLayoutManager((getContext())));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(firstFragmentBinding.recyclerView);
+
+
+        contactsViewModel.getListLiveData().observe((LifecycleOwner) getActivity(), new Observer<List<ContactsData>>() {
+            @Override
+            public void onChanged(List<ContactsData> contactsData) {
+                if (contactsData.size() > 0) {
+                    for (int i = 0; i < contactsData.size(); i++) {
+                        ContactsData model = new ContactsData(contactsData.get(i).getContactsName(), contactsData.get(i).getContactsPhone());
+                        listContactsData.add(model);
+                    }
+                    firstFragmentBinding.recyclerView.setAdapter(adapter);
+
+                } else {
+                    checkPermission();
+                    callPermission();
+                }
+            }
+        });
 
         return view;
 
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        // retrieve all data that was written into the database
-//        List<ContactsData> contactsList = contactsDAO.getAllContacts();
-//        Collections.reverse(contactsList);
-//        // set the data into the recycler View
-//        adapter = new ContactsAdaptor(getActivity(), contactsList);
-//        firstFragmentBinding.recyclerView.setAdapter(adapter);
-//    }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
             ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
@@ -90,6 +100,7 @@ public class FirstFragment extends Fragment implements RvInterface {
             return false;
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int pos = viewHolder.getAbsoluteAdapterPosition();
@@ -99,23 +110,25 @@ public class FirstFragment extends Fragment implements RvInterface {
             switch (direction) {
                 case ItemTouchHelper.RIGHT:
                     itemOnClick(pos, number);
+                    adapter.notifyDataSetChanged();
                     break;
                 case ItemTouchHelper.LEFT:
                     sendMessage(number);
+                    adapter.notifyDataSetChanged();
                     break;
             }
         }
 
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeRightBackgroundColor(ContextCompat.getColor(context, R.color.purple_200))
-                    .addSwipeRightActionIcon(R.drawable.ic_phone_2)
+                    .addSwipeRightActionIcon(R.drawable.ic_person_2)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.orange))
                     .addSwipeLeftActionIcon(R.drawable.ic_message)
                     .create()
                     .decorate();
+
 
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
@@ -124,10 +137,10 @@ public class FirstFragment extends Fragment implements RvInterface {
 
     private void checkPermission() {
         if (ContextCompat.checkSelfPermission
-                (context, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                (context, READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions
-                    ((Activity) context, new String[]{Manifest.permission.READ_CONTACTS}, 100);
+                    ((Activity) context, new String[]{READ_CONTACTS}, 100);
 
         } else {
             getContacts();
@@ -144,10 +157,9 @@ public class FirstFragment extends Fragment implements RvInterface {
     }
 
     private void getContacts() {
-
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
         String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
-        Cursor cursor = requireActivity()
+        Cursor cursor = getActivity()
                 .getContentResolver()
                 .query(uri, null, null, null, sort);
 
@@ -164,7 +176,7 @@ public class FirstFragment extends Fragment implements RvInterface {
                 Uri uriPhone = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
 
-                Cursor phoneCursor = requireActivity().getContentResolver().query(
+                Cursor phoneCursor = getActivity().getContentResolver().query(
                         uriPhone, null, selection, new String[]{id}, null
                 );
 
@@ -172,17 +184,9 @@ public class FirstFragment extends Fragment implements RvInterface {
                     @SuppressLint("Range") String number = phoneCursor.getString(phoneCursor.getColumnIndex(
                             ContactsContract.CommonDataKinds.Phone.NUMBER
                     ));
-                    ContactsModel model = new ContactsModel(name, number);
-                    arrayList.add(model);
-                    model.setContactName(name);
-                    model.setPhone(number);
 
-                    contactsViewModel = new ViewModelProvider(FirstFragment.this).get(ContactsViewModel.class);
-                    contactsViewModel.getListLiveData().observe(getViewLifecycleOwner(), contactsData -> {
-
-                    });
-
-                    contactsViewModel.insert(new ContactsData(name , number));
+                    ContactsData data = new ContactsData(name, number);
+                    contactsViewModel.insert(data);
 
                     phoneCursor.close();
                 }
@@ -196,8 +200,6 @@ public class FirstFragment extends Fragment implements RvInterface {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:" + phoneNo));
         startActivity(intent);
-        Toast.makeText(getContext(), "Position is " + position, Toast.LENGTH_SHORT).show();
-        Toast.makeText(getContext(), "Number is " + phoneNo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -207,17 +209,8 @@ public class FirstFragment extends Fragment implements RvInterface {
         smsIntent.setType("vnd.android-dir/mms-sms");
         startActivity(smsIntent);
     }
-}
 
-//        contactsViewBinding.btnCall.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getContext(), "no is" , Toast.LENGTH_SHORT).show();
-////                Intent intent = new Intent(Intent.ACTION_CALL);
-////                intent.setData(Uri.parse("tel:9266088895"));
-////                startActivity(intent);
-//            }
-//        });
+}
 
 
 //    @Override

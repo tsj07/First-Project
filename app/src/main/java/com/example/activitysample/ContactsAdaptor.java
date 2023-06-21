@@ -6,40 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Ignore;
 
 import com.example.activitysample.RoomDatabase.ContactsData;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.ContactsHolder> {
-
     Activity activity;
-    ArrayList<ContactsModel> arrayList;
+    ArrayList<ContactsData> listData;
     RvInterface rvInterface;
-    List<ContactsData> contactsEntityList;
 
-    public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList, RvInterface rvInterface) {
+    public ContactsAdaptor(Activity activity, ArrayList<ContactsData> listData, RvInterface rvInterface) {
         this.activity = activity;
-        this.arrayList = arrayList;
+        this.listData = listData;
         this.rvInterface = rvInterface;
-    }
-
-    @Ignore
-    public ContactsAdaptor(FragmentActivity activity, List<ContactsData> contactsEntityList) {
-        this.activity = activity;
-        this.contactsEntityList = contactsEntityList;
-    }
-
-    public ContactsAdaptor(Activity activity, ArrayList<ContactsModel> arrayList) {
-        this.activity = activity;
-        this.arrayList = arrayList;
     }
 
     @NonNull
@@ -52,14 +35,14 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
 
     @Override
     public void onBindViewHolder(@NonNull ContactsHolder holder, int position) {
-        ContactsModel contactsModel = arrayList.get(position);
-        holder.tvName.setText(contactsModel.getContactName());
-        holder.tvPhone.setText(contactsModel.getPhone());
+        ContactsData contactsData = listData.get(position);
+        holder.tvName.setText(contactsData.getContactsName());
+        holder.tvPhone.setText(contactsData.getContactsPhone());
     }
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return listData.size();
     }
 
     public static class ContactsHolder extends RecyclerView.ViewHolder {
@@ -72,13 +55,6 @@ public class ContactsAdaptor extends RecyclerView.Adapter<ContactsAdaptor.Contac
             tvName = itemView.findViewById(R.id.tvContactName);
             tvPhone = itemView.findViewById(R.id.tvContactPhone);
             btnCall = itemView.findViewById(R.id.btnCall);
-
-            btnCall.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked", Toast.LENGTH_SHORT).show();
-                }
-            });
 
             itemView.setOnClickListener(v -> {
                 if (rvInterface != null) {

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ContactsRepository {
 
-    private final LiveData<List<ContactsData>> listLiveData;
+    private LiveData<List<ContactsData>> listLiveData;
     private ContactsDAO mDao;
 
     ContactsRepository(Application application) {
@@ -21,9 +21,9 @@ public class ContactsRepository {
         return listLiveData;
     }
 
-    void addContacts(ContactsData contactsEntity) {
+    void addContacts(ContactsData contactsData) {
         ContactsDatabase.databaseExecutor.execute(() -> {
-            mDao.addContacts(contactsEntity);
+            mDao.addContacts(contactsData);
         });
     }
 

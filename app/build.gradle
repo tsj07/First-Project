@@ -26,13 +26,17 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true;
     }
     namespace 'com.example.activitysample'
 }
 
 dependencies {
+
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
 // Room components
     implementation "androidx.room:room-runtime:2.5.0"
@@ -41,14 +45,15 @@ dependencies {
 
     // Lifecycle components & ViewModel and livedata
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.5.1'
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.6.1'
 
     implementation "com.airbnb.android:lottie:5.2.0"
     implementation("com.tbuonomo:dotsindicator:4.3")
     implementation 'com.mikhaellopez:circularimageview:4.3.1'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
     implementation 'com.google.android.material:material:1.9.0-alpha01'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation "androidx.fragment:fragment:1.5.5"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'

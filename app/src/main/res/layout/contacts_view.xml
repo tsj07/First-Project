@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="7dp"
-    android:layout_marginBottom="7dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/ivContacts"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginEnd="10dp"
         android:contentDescription="TODO"
@@ -26,34 +26,36 @@
         <TextView
             android:id="@+id/tvContactName"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:maxLines="1"
-            android:padding="2dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/tvContactPhone"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
+            android:layout_height="24dp"
             android:maxLines="1"
-            android:padding="2dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/btnCall"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="5dp"
         android:padding="4dp"
-        android:background="@drawable/ic_phone"
+        android:background="@drawable/ic_message2"
         android:contentDescription="TODO" />
 
 </LinearLayout>
